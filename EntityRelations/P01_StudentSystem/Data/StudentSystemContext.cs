@@ -5,6 +5,21 @@ namespace P01_StudentSystem.Data
 {
     public class StudentSystemContext : DbContext
     {
+        public StudentSystemContext()
+        {
+        }
+
+        public StudentSystemContext(DbContextOptions options)
+        : base(options)
+        {
+        }
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Resource> Resources { get; set; }
+        public DbSet<Homework> HomeworkSubmissions { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -18,7 +33,8 @@ namespace P01_StudentSystem.Data
         {
             modelBuilder.Entity<Student>(entity =>
             {
-                entity.HasKey(e => e.StudentId);
+                entity
+                    .HasKey(e => e.StudentId);
 
                 entity
                     .HasMany(s => s.HomeworkSubmissions)
@@ -37,7 +53,8 @@ namespace P01_StudentSystem.Data
 
             modelBuilder.Entity<Course>(entity =>
             {
-                entity.HasKey(c => c.CourseId);
+                entity
+                    .HasKey(c => c.CourseId);
 
                 entity
                     .HasMany(c => c.HomeworkSubmissions)
@@ -67,20 +84,40 @@ namespace P01_StudentSystem.Data
                     .HasMaxLength(50)
                     .IsUnicode()
                     .IsRequired();
+
+                entity
+                    .Property(r => r.Url)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<Homework>(entity =>
             {
-                entity.HasKey(h => h.HomeworkId);
+                entity
+                    .HasKey(h => h.HomeworkId);
+
+                entity
+                    .Property(h => h.Content)
+                    .IsRequired();
             });
 
             modelBuilder.Entity<StudentCourse>(entity =>
             {
-                entity.HasKey(sc => new
-                {
-                    sc.CourseId,
-                    sc.StudentId
-                });
+                entity
+                    .HasKey(sc => new
+                    {
+                        sc.CourseId,
+                        sc.StudentId
+                    });
+
+                entity
+                    .HasOne(sc => sc.Student)
+                    .WithMany(s => s.CourseEnrollments)
+                    .HasForeignKey(sc => sc.StudentId);
+
+                entity
+                    .HasOne(sc => sc.Course)
+                    .WithMany(c => c.StudentsEnrolled)
+                    .HasForeignKey(sc => sc.CourseId);
             });
         }
     }

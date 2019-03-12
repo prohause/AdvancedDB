@@ -15,7 +15,7 @@ namespace P01_StudentSystem.Data.Models
 
         public ContentType ContentType { get; set; }
 
-        public DateTime SubmissionTime { get; }
+        public DateTime SubmissionTime { get; set; }
 
         public int StudentId { get; set; }
         public Student Student { get; set; }

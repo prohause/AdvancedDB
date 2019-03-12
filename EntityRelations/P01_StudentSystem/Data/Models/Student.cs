@@ -5,23 +5,19 @@ namespace P01_StudentSystem.Data.Models
 {
     public class Student
     {
-        public Student(string name, string phoneNumber = null, DateTime? birthDate = null)
+        public Student()
         {
-            Name = name;
-            PhoneNumber = phoneNumber;
-            RegisteredOn = DateTime.Now;
-            Birthday = birthDate;
             HomeworkSubmissions = new List<Homework>();
             CourseEnrollments = new List<StudentCourse>();
         }
 
         public int StudentId { get; set; }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public string PhoneNumber { get; set; }
 
-        public DateTime RegisteredOn { get; }
+        public DateTime RegisteredOn { get; set; }
 
         public DateTime? Birthday { get; set; }
 
