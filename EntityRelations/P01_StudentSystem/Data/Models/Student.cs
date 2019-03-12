@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace P01_StudentSystem.Data.Models
 {
@@ -10,6 +11,8 @@ namespace P01_StudentSystem.Data.Models
             PhoneNumber = phoneNumber;
             RegisteredOn = DateTime.Now;
             Birthday = birthDate;
+            HomeworkSubmissions = new List<Homework>();
+            CourseEnrollments = new List<StudentCourse>();
         }
 
         public int StudentId { get; set; }
@@ -21,5 +24,9 @@ namespace P01_StudentSystem.Data.Models
         public DateTime RegisteredOn { get; }
 
         public DateTime? Birthday { get; set; }
+
+        public ICollection<Homework> HomeworkSubmissions { get; set; }
+
+        public ICollection<StudentCourse> CourseEnrollments { get; set; }
     }
 }
