@@ -1,4 +1,6 @@
-﻿namespace BillsPaymentSystem.Models
+﻿using System.Collections.Generic;
+
+namespace BillsPaymentSystem.Models
 {
     public class User
     {
@@ -11,5 +13,7 @@
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+        public ICollection<PaymentMethod> PaymentMethods { get; set; } = new HashSet<PaymentMethod>();
     }
 }
