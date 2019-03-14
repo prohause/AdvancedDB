@@ -30,6 +30,10 @@ namespace BillsPaymentSystem.Data.EntityConfigurations
                 .HasMaxLength(25)
                 .IsUnicode(false)
                 .IsRequired();
+
+            builder.
+                HasMany(u => u.PaymentMethods)
+                .WithOne(p => p.User);
         }
     }
 }

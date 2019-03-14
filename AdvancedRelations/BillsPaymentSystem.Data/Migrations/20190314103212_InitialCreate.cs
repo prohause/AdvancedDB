@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BillsPaymentSystem.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace BillsPaymentSystem.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Balance = table.Column<decimal>(nullable: false),
                     BankName = table.Column<string>(maxLength: 50, nullable: false),
-                    SwiftCode = table.Column<string>(maxLength: 20, nullable: false)
+                    SwiftCode = table.Column<string>(unicode: false, maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,8 +46,8 @@ namespace BillsPaymentSystem.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(maxLength: 50, nullable: false),
                     LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    Email = table.Column<string>(maxLength: 80, nullable: false),
-                    Password = table.Column<string>(maxLength: 25, nullable: false)
+                    Email = table.Column<string>(unicode: false, maxLength: 80, nullable: false),
+                    Password = table.Column<string>(unicode: false, maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {

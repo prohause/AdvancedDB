@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillsPaymentSystem.Data.Migrations
 {
     [DbContext(typeof(BillsPaymentSystemContext))]
-    [Migration("20190314102050_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20190314154555_AddedRelation")]
+    partial class AddedRelation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,12 +31,12 @@ namespace BillsPaymentSystem.Data.Migrations
 
                     b.Property<string>("BankName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true);
+                        .HasMaxLength(50);
 
                     b.Property<string>("SwiftCode")
                         .IsRequired()
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .IsUnicode(false);
 
                     b.HasKey("BankAccountId");
 
@@ -93,21 +93,21 @@ namespace BillsPaymentSystem.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(80);
+                        .HasMaxLength(80)
+                        .IsUnicode(false);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true);
+                        .HasMaxLength(50);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true);
+                        .HasMaxLength(50);
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(25);
+                        .HasMaxLength(25)
+                        .IsUnicode(false);
 
                     b.HasKey("UserId");
 
