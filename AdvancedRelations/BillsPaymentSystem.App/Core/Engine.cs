@@ -15,10 +15,11 @@ namespace BillsPaymentSystem.App.Core
 
         public void Run()
         {
-            while (true)
-            {
-                var inputParams = Console.ReadLine()?.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            string input;
 
+            while ((input = Console.ReadLine()) != string.Empty)
+            {
+                var inputParams = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
                 using (var context = new BillsPaymentSystemContext())
                 {
                     var result = _commandInterpreter.Read(inputParams, context);

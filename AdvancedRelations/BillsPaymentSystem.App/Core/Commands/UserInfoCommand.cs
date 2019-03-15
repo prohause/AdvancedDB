@@ -1,6 +1,5 @@
 ﻿using BillsPaymentSystem.App.Core.Commands.Contracts;
 using BillsPaymentSystem.Data;
-using BillsPaymentSystem.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -21,16 +20,15 @@ namespace BillsPaymentSystem.App.Core.Commands
         {
             var userId = int.Parse(args[0]);
 
-            var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+            var user = _context.Users.Include(p => p.PaymentMethods).ThenInclude(b => b.BankAccount).Include(c => c.PaymentMethods).ThenInclude(c => c.CreditCard).FirstOrDefault(u => u.UserId == userId);
 
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(userId), "User not found!");
             }
 
-            var paymentMethods = _context.PaymentMethods.Where(p => p.UserId == user.UserId).Include(b => b.BankAccount).Include(c => c.CreditCard).ToList();
-            var bankAccounts = paymentMethods.Where(p => p.PaymentType == PaymentType.BankAccount).ToList();
-            var creditCardAccounts = paymentMethods.Where(p => p.PaymentType == PaymentType.CreditCard).ToList();
+            var bankAccounts = user.PaymentMethods.Where(p => p.BankAccountId != null).OrderBy(b => b.BankAccountId).ToList();
+            var creditCardAccounts = user.PaymentMethods.Where(p => p.CreditCardId != null).OrderBy(c => c.CreditCardId).ToList();
 
             var sb = new StringBuilder();
             sb.AppendLine($"User: {user.FirstName} {user.LastName}");
