@@ -14,9 +14,20 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = CountCopiesByAuthor(db);
+                var result = GetTotalProfitByCategory(db);
                 Console.WriteLine(result);
             }
+        }
+
+        public static string GetTotalProfitByCategory(BookShopContext context)
+        {
+            var profitByCategory = context.Categories.Select(c => new
+            {
+                c.Name,
+                Profit = c.CategoryBooks.Select(cb => cb.Book.Copies * cb.Book.Price).Sum()
+            }).ToList().OrderByDescending(x => x.Profit).Select(x => $"{x.Name} ${x.Profit:F2}").ToList();
+
+            return string.Join(Environment.NewLine, profitByCategory);
         }
 
         public static string CountCopiesByAuthor(BookShopContext context)
