@@ -14,7 +14,7 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = GetAuthorNamesEndingIn(db, "e");
+                var result = GetBookTitlesContaining(db, "sk");
                 Console.WriteLine(result);
             }
         }
@@ -75,6 +75,14 @@ namespace BookShop
                 .Select(a => $"{a.FirstName} {a.LastName}").OrderBy(x => x).ToList();
 
             return string.Join(Environment.NewLine, authors);
+        }
+
+        public static string GetBookTitlesContaining(BookShopContext context, string input)
+        {
+            var books = context.Books.Where(b => b.Title.ToLower().Contains(input.ToLower())).Select(b => b.Title)
+                .OrderBy(x => x).ToList();
+
+            return string.Join(Environment.NewLine, books);
         }
     }
 }
