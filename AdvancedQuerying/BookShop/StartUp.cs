@@ -14,9 +14,14 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = GetBooksByAuthor(db, "R");
+                var result = CountBooks(db, 12);
                 Console.WriteLine(result);
             }
+        }
+
+        public static int CountBooks(BookShopContext context, int lengthCheck)
+        {
+            return context.Books.Count(b => b.Title.Length > lengthCheck);
         }
 
         public static string GetBooksByAgeRestriction(BookShopContext context, string command)
