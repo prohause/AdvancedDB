@@ -1,4 +1,5 @@
-﻿using BookShop.Models.Enums;
+﻿using BookShop.Initializer;
+using BookShop.Models.Enums;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -13,9 +14,21 @@ namespace BookShop
         {
             using (var db = new BookShopContext())
             {
-                //DbInitializer.ResetDatabase(db);
-                IncreasePrices(db);
+                DbInitializer.ResetDatabase(db);
+                var result = RemoveBooks(db);
+                Console.WriteLine(result);
+                Console.WriteLine(db.Books.Count());
             }
+        }
+
+        public static int RemoveBooks(BookShopContext context)
+        {
+            var booksToRemove = context.Books.Where(b => b.Copies < 4200);
+            var result = booksToRemove.Count();
+            context.Books.RemoveRange(booksToRemove);
+            context.SaveChanges();
+
+            return result;
         }
 
         public static void IncreasePrices(BookShopContext context)
