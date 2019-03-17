@@ -14,9 +14,15 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = GetMostRecentBooks(db);
-                Console.WriteLine(result);
+                IncreasePrices(db);
             }
+        }
+
+        public static void IncreasePrices(BookShopContext context)
+        {
+            var books = context.Books.Where(b => ((DateTime)b.ReleaseDate).Year < 2010).ToList();
+            books.ForEach(b => b.Price += 5);
+            context.SaveChanges();
         }
 
         public static string GetMostRecentBooks(BookShopContext context)
