@@ -14,7 +14,7 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = GetBooksReleasedBefore(db, "12-04-1992");
+                var result = GetAuthorNamesEndingIn(db, "e");
                 Console.WriteLine(result);
             }
         }
@@ -67,6 +67,14 @@ namespace BookShop
                 .Select(b => $"{b.Title} - {b.EditionType} - ${b.Price:F2}").ToList();
 
             return string.Join(Environment.NewLine, books);
+        }
+
+        public static string GetAuthorNamesEndingIn(BookShopContext context, string input)
+        {
+            var authors = context.Authors.Where(a => a.FirstName.EndsWith(input))
+                .Select(a => $"{a.FirstName} {a.LastName}").OrderBy(x => x).ToList();
+
+            return string.Join(Environment.NewLine, authors);
         }
     }
 }
