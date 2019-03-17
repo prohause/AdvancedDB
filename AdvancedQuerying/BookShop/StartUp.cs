@@ -14,9 +14,21 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = GetTotalProfitByCategory(db);
+                var result = GetMostRecentBooks(db);
                 Console.WriteLine(result);
             }
+        }
+
+        public static string GetMostRecentBooks(BookShopContext context)
+        {
+            var category = context.Categories.Select(c => new
+            {
+                c.Name,
+                Books = c.CategoryBooks.OrderByDescending(cb => cb.Book.ReleaseDate).Take(3)
+            }).OrderBy(c => c.Name).Select(x => $"--{x.Name}" + Environment.NewLine + string.Join(Environment.NewLine, x.Books.Select(b => $"{b.Book.Title} ({((DateTime)b.Book.ReleaseDate).Year})")))
+                .ToList();
+
+            return string.Join(Environment.NewLine, category);
         }
 
         public static string GetTotalProfitByCategory(BookShopContext context)
