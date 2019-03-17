@@ -1,5 +1,6 @@
 ﻿using BookShop.Models.Enums;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace BookShop
@@ -13,7 +14,7 @@ namespace BookShop
             using (var db = new BookShopContext())
             {
                 //DbInitializer.ResetDatabase(db);
-                var result = GetBooksByCategory(db, "horror mystery drama");
+                var result = GetBooksReleasedBefore(db, "12-04-1992");
                 Console.WriteLine(result);
             }
         }
@@ -54,6 +55,16 @@ namespace BookShop
             var books = context.Books
                 .Where(b => b.BookCategories.Any(x => categories.Contains(x.Category.Name.ToLower())))
                 .Select(b => b.Title).OrderBy(x => x).ToList();
+
+            return string.Join(Environment.NewLine, books);
+        }
+
+        public static string GetBooksReleasedBefore(BookShopContext context, string date)
+        {
+            var endDate = DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            var books = context.Books.Where(b => b.ReleaseDate < endDate).OrderByDescending(x => x.ReleaseDate)
+                .Select(b => $"{b.Title} - {b.EditionType} - ${b.Price:F2}").ToList();
 
             return string.Join(Environment.NewLine, books);
         }
