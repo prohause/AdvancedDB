@@ -16,5 +16,8 @@ namespace BillsPaymentSystem.Models
         [Required]
         [MinLength(3), MaxLength(20)]
         public string SwiftCode { get; set; }
+
+        public int PaymentMethodId { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
     }
 }

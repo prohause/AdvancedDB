@@ -19,5 +19,7 @@ namespace MyApp.Models
         public DateTime? Birthday { get; set; }
 
         public string Address { get; set; }
+
+        public int ManagerId { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using BillsPaymentSystem.App.Core;
-using BillsPaymentSystem.App.Core.Contracts;
-using BillsPaymentSystem.Data;
+﻿using BillsPaymentSystem.Data;
 
 namespace BillsPaymentSystem.App
 {
@@ -10,13 +8,13 @@ namespace BillsPaymentSystem.App
         {
             using (var context = new BillsPaymentSystemContext())
             {
-                //DbInitializer.Seed(context);
+                DbInitializer.Seed(context);
 
-                ICommandInterpreter commandInterpreter = new CommandInterpreter();
+                //ICommandInterpreter commandInterpreter = new CommandInterpreter();
 
-                IEngine engine = new Engine(commandInterpreter);
+                //IEngine engine = new Engine(commandInterpreter);
 
-                engine.Run();
+                //engine.Run();
             }
         }
     }

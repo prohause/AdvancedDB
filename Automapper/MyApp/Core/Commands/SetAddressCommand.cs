@@ -3,16 +3,16 @@ using MyApp.Core.Commands.Contracts;
 using MyApp.Core.ViewModels;
 using MyApp.Data;
 using System;
-using System.Globalization;
+using System.Linq;
 
 namespace MyApp.Core.Commands
 {
-    public class SetBirthdayCommand : ICommand
+    public class SetAddressCommand : ICommand
     {
         private readonly MyAppContext _context;
         private readonly Mapper _mapper;
 
-        public SetBirthdayCommand(MyAppContext context, Mapper mapper)
+        public SetAddressCommand(MyAppContext context, Mapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -21,21 +21,21 @@ namespace MyApp.Core.Commands
         public string Execute(string[] inputArgs)
         {
             var employeeId = int.Parse(inputArgs[0]);
-            var birthDate = DateTime.ParseExact(inputArgs[1], "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            var address = string.Join(" ", inputArgs.Skip(1));
 
             var employee = _context.Employees.Find(employeeId);
 
             if (employee == null)
             {
-                throw new ArgumentNullException(nameof(employeeId), "Id not found in the database");
+                throw new ArgumentNullException(nameof(employeeId), "Id not found in database");
             }
 
-            employee.Birthday = birthDate;
+            employee.Address = address;
             _context.SaveChanges();
 
             var employeeDto = _mapper.CreateMappedObject<EmployeeDto>(employee);
 
-            var result = $"Birthday changed successfully: {employeeDto.FirstName} {employeeDto.LastName}";
+            var result = $"Address changed successfully: {employeeDto.FirstName} {employeeDto.LastName}";
 
             return result;
         }

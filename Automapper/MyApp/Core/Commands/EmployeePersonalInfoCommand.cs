@@ -3,16 +3,16 @@ using MyApp.Core.Commands.Contracts;
 using MyApp.Core.ViewModels;
 using MyApp.Data;
 using System;
-using System.Globalization;
+using System.Text;
 
 namespace MyApp.Core.Commands
 {
-    public class SetBirthdayCommand : ICommand
+    public class EmployeePersonalInfoCommand : ICommand
     {
         private readonly MyAppContext _context;
         private readonly Mapper _mapper;
 
-        public SetBirthdayCommand(MyAppContext context, Mapper mapper)
+        public EmployeePersonalInfoCommand(MyAppContext context, Mapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -21,7 +21,6 @@ namespace MyApp.Core.Commands
         public string Execute(string[] inputArgs)
         {
             var employeeId = int.Parse(inputArgs[0]);
-            var birthDate = DateTime.ParseExact(inputArgs[1], "dd-MM-yyyy", CultureInfo.InvariantCulture);
 
             var employee = _context.Employees.Find(employeeId);
 
@@ -30,14 +29,18 @@ namespace MyApp.Core.Commands
                 throw new ArgumentNullException(nameof(employeeId), "Id not found in the database");
             }
 
-            employee.Birthday = birthDate;
-            _context.SaveChanges();
-
             var employeeDto = _mapper.CreateMappedObject<EmployeeDto>(employee);
 
-            var result = $"Birthday changed successfully: {employeeDto.FirstName} {employeeDto.LastName}";
+            var result = new StringBuilder();
+            result.AppendLine($"ID: {employeeId} - {employeeDto.FirstName} {employeeDto.LastName} -  ${employeeDto.Salary:F2}");
+            if (employee.Birthday != null)
+            {
+                result.AppendLine($"Birthday: {employee.Birthday.Value.Date}");
+            }
 
-            return result;
+            result.AppendLine($"Address: {employee.Address}");
+
+            return result.ToString().TrimEnd();
         }
     }
 }

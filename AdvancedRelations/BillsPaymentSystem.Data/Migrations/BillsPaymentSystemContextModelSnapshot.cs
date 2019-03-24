@@ -21,15 +21,15 @@ namespace BillsPaymentSystem.Data.Migrations
 
             modelBuilder.Entity("BillsPaymentSystem.Models.BankAccount", b =>
                 {
-                    b.Property<int>("BankAccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("BankAccountId");
 
                     b.Property<decimal>("Balance");
 
                     b.Property<string>("BankName")
                         .IsRequired()
                         .HasMaxLength(50);
+
+                    b.Property<int>("PaymentMethodId");
 
                     b.Property<string>("SwiftCode")
                         .IsRequired()
@@ -43,15 +43,15 @@ namespace BillsPaymentSystem.Data.Migrations
 
             modelBuilder.Entity("BillsPaymentSystem.Models.CreditCard", b =>
                 {
-                    b.Property<int>("CreditCardId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("CreditCardId");
 
                     b.Property<DateTime>("ExpirationDate");
 
                     b.Property<decimal>("Limit");
 
                     b.Property<decimal>("MoneyOwed");
+
+                    b.Property<int>("PaymentMethodId");
 
                     b.HasKey("CreditCardId");
 
@@ -73,10 +73,6 @@ namespace BillsPaymentSystem.Data.Migrations
                     b.Property<int>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BankAccountId");
-
-                    b.HasIndex("CreditCardId");
 
                     b.HasIndex("UserId");
 
@@ -112,16 +108,24 @@ namespace BillsPaymentSystem.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BillsPaymentSystem.Models.BankAccount", b =>
+                {
+                    b.HasOne("BillsPaymentSystem.Models.PaymentMethod", "PaymentMethod")
+                        .WithOne("BankAccount")
+                        .HasForeignKey("BillsPaymentSystem.Models.BankAccount", "BankAccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BillsPaymentSystem.Models.CreditCard", b =>
+                {
+                    b.HasOne("BillsPaymentSystem.Models.PaymentMethod", "PaymentMethod")
+                        .WithOne("CreditCard")
+                        .HasForeignKey("BillsPaymentSystem.Models.CreditCard", "CreditCardId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("BillsPaymentSystem.Models.PaymentMethod", b =>
                 {
-                    b.HasOne("BillsPaymentSystem.Models.BankAccount", "BankAccount")
-                        .WithMany()
-                        .HasForeignKey("BankAccountId");
-
-                    b.HasOne("BillsPaymentSystem.Models.CreditCard", "CreditCard")
-                        .WithMany()
-                        .HasForeignKey("CreditCardId");
-
                     b.HasOne("BillsPaymentSystem.Models.User", "User")
                         .WithMany("PaymentMethods")
                         .HasForeignKey("UserId")

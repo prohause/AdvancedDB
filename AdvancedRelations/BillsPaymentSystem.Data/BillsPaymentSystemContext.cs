@@ -29,6 +29,7 @@ namespace BillsPaymentSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new BankAccountConfig());
+            modelBuilder.ApplyConfiguration(new PaymentMethodConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
         }
     }

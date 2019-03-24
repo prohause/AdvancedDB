@@ -4,40 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BillsPaymentSystem.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "BankAccounts",
-                columns: table => new
-                {
-                    BankAccountId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Balance = table.Column<decimal>(nullable: false),
-                    BankName = table.Column<string>(maxLength: 50, nullable: false),
-                    SwiftCode = table.Column<string>(unicode: false, maxLength: 20, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankAccounts", x => x.BankAccountId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CreditCards",
-                columns: table => new
-                {
-                    CreditCardId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Limit = table.Column<decimal>(nullable: false),
-                    MoneyOwed = table.Column<decimal>(nullable: false),
-                    ExpirationDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CreditCards", x => x.CreditCardId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -69,18 +39,6 @@ namespace BillsPaymentSystem.Data.Migrations
                 {
                     table.PrimaryKey("PK_PaymentMethods", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PaymentMethods_BankAccounts_BankAccountId",
-                        column: x => x.BankAccountId,
-                        principalTable: "BankAccounts",
-                        principalColumn: "BankAccountId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PaymentMethods_CreditCards_CreditCardId",
-                        column: x => x.CreditCardId,
-                        principalTable: "CreditCards",
-                        principalColumn: "CreditCardId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_PaymentMethods_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
@@ -88,15 +46,47 @@ namespace BillsPaymentSystem.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_PaymentMethods_BankAccountId",
-                table: "PaymentMethods",
-                column: "BankAccountId");
+            migrationBuilder.CreateTable(
+                name: "BankAccounts",
+                columns: table => new
+                {
+                    BankAccountId = table.Column<int>(nullable: false),
+                    Balance = table.Column<decimal>(nullable: false),
+                    BankName = table.Column<string>(maxLength: 50, nullable: false),
+                    SwiftCode = table.Column<string>(unicode: false, maxLength: 20, nullable: false),
+                    PaymentMethodId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BankAccounts", x => x.BankAccountId);
+                    table.ForeignKey(
+                        name: "FK_BankAccounts_PaymentMethods_BankAccountId",
+                        column: x => x.BankAccountId,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_PaymentMethods_CreditCardId",
-                table: "PaymentMethods",
-                column: "CreditCardId");
+            migrationBuilder.CreateTable(
+                name: "CreditCards",
+                columns: table => new
+                {
+                    CreditCardId = table.Column<int>(nullable: false),
+                    Limit = table.Column<decimal>(nullable: false),
+                    MoneyOwed = table.Column<decimal>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: false),
+                    PaymentMethodId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CreditCards", x => x.CreditCardId);
+                    table.ForeignKey(
+                        name: "FK_CreditCards_PaymentMethods_CreditCardId",
+                        column: x => x.CreditCardId,
+                        principalTable: "PaymentMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_PaymentMethods_UserId",
@@ -107,13 +97,13 @@ namespace BillsPaymentSystem.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PaymentMethods");
-
-            migrationBuilder.DropTable(
                 name: "BankAccounts");
 
             migrationBuilder.DropTable(
                 name: "CreditCards");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "Users");
