@@ -19,7 +19,7 @@ namespace MyApp.Core.Commands
 
         public string Execute(string[] inputArgs)
         {
-            //_context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
             var firstName = inputArgs[0];
             var lastName = inputArgs[1];
             var salary = decimal.Parse(inputArgs[2]);
