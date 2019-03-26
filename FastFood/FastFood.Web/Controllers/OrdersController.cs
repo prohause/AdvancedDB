@@ -1,11 +1,14 @@
-﻿namespace FastFood.Web.Controllers
+﻿using AutoMapper.QueryableExtensions;
+using FastFood.Models;
+using FastFood.Models.Enums;
+using System;
+
+namespace FastFood.Web.Controllers
 {
     using AutoMapper;
-    using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Linq;
-
     using Data;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
     using ViewModels.Orders;
 
     public class OrdersController : Controller
@@ -23,22 +26,57 @@
         {
             var viewOrder = new CreateOrderViewModel
             {
-                Items = this.context.Items.Select(x => x.Id).ToList(),
-                Employees = this.context.Employees.Select(x => x.Id).ToList(),
+                Items = context.Items.Select(x => x.Name).OrderBy(s => s).ToList(),
+                Employees = context.Employees.Select(x => x.Name).OrderBy(s => s).ToList(),
             };
 
-            return this.View(viewOrder);
+            return View(viewOrder);
         }
 
         [HttpPost]
         public IActionResult Create(CreateOrderInputModel model)
-        { 
-            return this.RedirectToAction("All", "Orders");
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            var order = mapper.Map<Order>(model);
+            order.DateTime = DateTime.Now;
+            var item = context.Items.FirstOrDefault(x => x.Name == model.ItemName);
+
+            var employee = context.Employees.FirstOrDefault(x => x.Name == model.EmployeeName);
+            if (item != null)
+            {
+                order.OrderItems.Add(new OrderItem()
+                {
+                    ItemId = item.Id,
+                    Order = order,
+                    Quantity = model.Quantity
+                });
+            }
+
+            order.Type = Enum.Parse<OrderType>(model.OrderType);
+
+            if (employee != null)
+            {
+                order.EmployeeId = employee.Id;
+            }
+
+            context.Orders.Add(order);
+
+            context.SaveChanges();
+
+            return RedirectToAction("All", "Orders");
         }
 
         public IActionResult All()
         {
-            throw new NotImplementedException();
+            var orders = context.Orders
+                .ProjectTo<OrderAllViewModel>(mapper.ConfigurationProvider)
+                .ToList();
+
+            return View(orders);
         }
     }
 }
