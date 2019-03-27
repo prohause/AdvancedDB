@@ -13,21 +13,21 @@ namespace FastFood.Web.Controllers
 
     public class OrdersController : Controller
     {
-        private readonly FastFoodContext context;
-        private readonly IMapper mapper;
+        private readonly FastFoodContext _context;
+        private readonly IMapper _mapper;
 
         public OrdersController(FastFoodContext context, IMapper mapper)
         {
-            this.context = context;
-            this.mapper = mapper;
+            _context = context;
+            _mapper = mapper;
         }
 
         public IActionResult Create()
         {
             var viewOrder = new CreateOrderViewModel
             {
-                Items = context.Items.Select(x => x.Name).OrderBy(s => s).ToList(),
-                Employees = context.Employees.Select(x => x.Name).OrderBy(s => s).ToList(),
+                Items = _context.Items.Select(x => x.Name).OrderBy(s => s).ToList(),
+                Employees = _context.Employees.Select(x => x.Name).OrderBy(s => s).ToList(),
             };
 
             return View(viewOrder);
@@ -41,11 +41,11 @@ namespace FastFood.Web.Controllers
                 return RedirectToAction("Error", "Home");
             }
 
-            var order = mapper.Map<Order>(model);
+            var order = _mapper.Map<Order>(model);
             order.DateTime = DateTime.Now;
-            var item = context.Items.FirstOrDefault(x => x.Name == model.ItemName);
+            var item = _context.Items.FirstOrDefault(x => x.Name == model.ItemName);
 
-            var employee = context.Employees.FirstOrDefault(x => x.Name == model.EmployeeName);
+            var employee = _context.Employees.FirstOrDefault(x => x.Name == model.EmployeeName);
             if (item != null)
             {
                 order.OrderItems.Add(new OrderItem()
@@ -63,17 +63,17 @@ namespace FastFood.Web.Controllers
                 order.EmployeeId = employee.Id;
             }
 
-            context.Orders.Add(order);
+            _context.Orders.Add(order);
 
-            context.SaveChanges();
+            _context.SaveChanges();
 
             return RedirectToAction("All", "Orders");
         }
 
         public IActionResult All()
         {
-            var orders = context.Orders
-                .ProjectTo<OrderAllViewModel>(mapper.ConfigurationProvider)
+            var orders = _context.Orders
+                .ProjectTo<OrderAllViewModel>(_mapper.ConfigurationProvider)
                 .ToList();
 
             return View(orders);
