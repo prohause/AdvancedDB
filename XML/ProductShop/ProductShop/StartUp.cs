@@ -33,13 +33,42 @@ namespace ProductShop
 
             //var inputData = File.ReadAllText(@"C:\Users\proha\source\repos\AdvancedDB\XML\ProductShop\ProductShop\Datasets\categories-products.xml");
 
-            var output = GetCategoriesByProductsCount(context);
+            var output = GetUsersWithProducts(context);
             Console.WriteLine(output);
         }
 
         public static string GetUsersWithProducts(ProductShopContext context)
         {
             var sb = new StringBuilder();
+
+            var users = context.Users.Where(u => u.ProductsSold.Any()).Select(u => new ExportUserAndProductsUserDto
+            {
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Age = u.Age,
+                ExportSoldProductsAllDto = new ExportSoldProductsAllDto
+                {
+                    Count = u.ProductsSold.Count,
+                    ExportSoldProductsDtos = u.ProductsSold.Select(p => new ExportSoldProductsDto
+                    {
+                        Name = p.Name,
+                        Price = p.Price
+                    })
+                        .OrderByDescending(p => p.Price)
+                        .ToList()
+                }
+            })
+            .OrderByDescending(x => x.ExportSoldProductsAllDto.Count)
+           .ToList();
+
+            var resultDto = new ExportUsersAndProductsUsersAllDto
+            {
+                Count = users.Count,
+                Users = users.Take(10).ToList()
+            };
+
+            var serializer = new XmlSerializer(typeof(ExportUsersAndProductsUsersAllDto));
+            serializer.Serialize(new StringWriter(sb), resultDto, Namespaces);
 
             return sb.ToString().TrimEnd();
         }

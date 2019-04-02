@@ -12,7 +12,7 @@ namespace ProductShop.Dtos.Export
         [XmlElement("lastName")]
         public string LastName { get; set; }
 
-        [XmlArray("soldProducts")]
+        //[XmlArray("soldProducts")]
         public List<ExportSoldProductsDto> SoldProducts { get; set; }
     }
 
