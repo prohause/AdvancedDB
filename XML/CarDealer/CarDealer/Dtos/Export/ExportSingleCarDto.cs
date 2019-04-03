@@ -3,9 +3,9 @@
 namespace CarDealer.Dtos.Export
 {
     [XmlRoot(ElementName = "car")]
-    public class ExportSingleCasDto
+    public class ExportSingleCarDto
     {
-        [XmlAttribute(AttributeName = "id")]
+        [XmlAttribute("id")]
         public int Id { get; set; }
 
         [XmlAttribute(AttributeName = "model")]

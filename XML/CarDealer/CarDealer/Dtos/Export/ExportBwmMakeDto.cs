@@ -7,7 +7,7 @@ namespace CarDealer.Dtos.Export
     public class ExportBwmMakeDto
     {
         [XmlElement(ElementName = "car")]
-        public List<ExportSingleCasDto> Car { get; set; }
+        public List<ExportSingleCarDto> Car { get; set; }
     }
 
     //<car id="7" model="1M Coupe" travelled-distance="39826890" />

@@ -33,9 +33,84 @@ namespace CarDealer
                 //context.Database.EnsureDeleted();
                 //context.Database.EnsureCreated();
 
-                var output = GetLocalSuppliers(context);
-                Console.WriteLine(output);
+                //var output = GetSalesWithAppliedDiscount(context);
+                //Console.WriteLine(output);
             }
+        }
+
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var sb = new StringBuilder();
+
+            var sales = context.Sales
+                .Select(s => new ExportSingleSaleDto
+                {
+                    ExportCarForSaleDto = new ExportCarForSaleDto
+                    {
+                        Make = s.Car.Make,
+                        Model = s.Car.Model,
+                        Distance = s.Car.TravelledDistance
+                    },
+                    Discount = s.Discount,
+                    CustomerName = s.Customer.Name,
+                    Price = s.Car.PartCars.Select(p => p.Part.Price).Sum(),
+                    PriceWithDiscount = (s.Car.PartCars.Select(p => p.Part.Price).Sum() * (1 - s.Discount / 100)).ToString("G29")
+                })
+                .ToList();
+
+            var serializer = new XmlSerializer(typeof(List<ExportSingleSaleDto>), new XmlRootAttribute("sales"));
+
+            serializer.Serialize(new StringWriter(sb), sales, Namespaces);
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var sb = new StringBuilder();
+
+            var customers = context.Customers
+                .Where(c => c.Sales.Any())
+                .Select(c => new ExportSingleCustomerDto
+                {
+                    FullName = c.Name,
+                    CarCount = c.Sales.Count,
+                    MoneySpent = c.Sales.Sum(x => x.Car.PartCars.Sum(p => p.Part.Price))
+                })
+                .OrderByDescending(x => x.MoneySpent)
+                .ToList();
+
+            var serializer = new XmlSerializer(typeof(List<ExportSingleCustomerDto>), new XmlRootAttribute("customers"));
+            serializer.Serialize(new StringWriter(sb), customers, Namespaces);
+
+            return sb.ToString().TrimEnd();
+        }
+
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var sb = new StringBuilder();
+
+            var cars = context.Cars.Select(x => new ExportCarWithPartsDto
+            {
+                Make = x.Make,
+                Model = x.Model,
+                Distance = x.TravelledDistance,
+                ExportSinglePartDtos = x.PartCars.Select(p => new ExportSinglePartDto
+                {
+                    Name = p.Part.Name,
+                    Price = p.Part.Price
+                }).OrderByDescending(p => p.Price).ToList()
+            })
+                .OrderByDescending(x => x.Distance)
+                .ThenBy(x => x.Model)
+                .Take(5)
+                .ToList();
+
+            var serializer = new XmlSerializer(typeof(List<ExportCarWithPartsDto>), new XmlRootAttribute("cars"));
+
+            serializer.Serialize(new StringWriter(sb), cars, Namespaces);
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string GetLocalSuppliers(CarDealerContext context)
@@ -82,7 +157,7 @@ namespace CarDealer
 
             var output = new ExportBwmMakeDto
             {
-                Car = cars.Select(x => new ExportSingleCasDto
+                Car = cars.Select(x => new ExportSingleCarDto
                 {
                     Id = x.Id,
                     Model = x.Model,
