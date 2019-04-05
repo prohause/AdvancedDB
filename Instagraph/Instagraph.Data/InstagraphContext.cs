@@ -1,4 +1,5 @@
 ﻿using Instagraph.Data.EntityConfigurations;
+using Instagraph.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Instagraph.Data
@@ -11,6 +12,12 @@ namespace Instagraph.Data
 
         public InstagraphContext(DbContextOptions options)
             : base(options) { }
+
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Picture> Pictures { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserFollower> UsersFollowers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
