@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
-
-using AutoMapper;
-
+﻿using AutoMapper;
 using Instagraph.Data;
 using Instagraph.DataProcessor;
+using System;
+using System.IO;
 using System.Text;
 
 namespace Instagraph.App
@@ -19,7 +17,7 @@ namespace Instagraph.App
 
             Console.WriteLine(ImportData());
 
-            ExportData();
+            //ExportData();
         }
 
         private static string ImportData()
@@ -70,7 +68,7 @@ namespace Instagraph.App
                 File.WriteAllText("files/output/CommentsOnPosts.xml", commentsOutput);
             }
         }
-        
+
         private static string ResetDatabase()
         {
             using (var context = new InstagraphContext())
