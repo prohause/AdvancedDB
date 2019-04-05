@@ -1,6 +1,4 @@
-﻿using VaporStore.Data.Models;
-
-namespace VaporStore.Data
+﻿namespace VaporStore.Data
 {
 	using Microsoft.EntityFrameworkCore;
 
@@ -15,16 +13,7 @@ namespace VaporStore.Data
 		{
 		}
 
-	    public DbSet<Card> Cards { get; set; }
-	    public DbSet<Developer> Developers { get; set; }
-	    public DbSet<Game> Games { get; set; }
-	    public DbSet<GameTag> GameTags { get; set; }
-	    public DbSet<Genre> Genres { get; set; }
-	    public DbSet<Purchase> Purchases { get; set; }
-	    public DbSet<Tag> Tags { get; set; }
-	    public DbSet<User> Users { get; set; }
-
-	    protected override void OnConfiguring(DbContextOptionsBuilder options)
+		protected override void OnConfiguring(DbContextOptionsBuilder options)
 		{
 			if (!options.IsConfigured)
 			{
@@ -35,8 +24,6 @@ namespace VaporStore.Data
 
 		protected override void OnModelCreating(ModelBuilder model)
 		{
-		    model.Entity<GameTag>()
-		        .HasKey(k => new {k.GameId, k.TagId});
 		}
 	}
 }
