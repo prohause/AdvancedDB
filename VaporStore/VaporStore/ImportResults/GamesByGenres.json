@@ -1,0 +1,70 @@
+[
+  {
+    "Id": 4,
+    "Genre": "Violent",
+    "Games": [
+      {
+        "Id": 22,
+        "Title": "Soul at Stake",
+        "Developer": "Chongming Studio",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 2
+      },
+      {
+        "Id": 40,
+        "Title": "Black Desert Online",
+        "Developer": "Pearl Abyss",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 1
+      },
+      {
+        "Id": 49,
+        "Title": "Warframe",
+        "Developer": "Digital Extremes",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 6
+      },
+      {
+        "Id": 71,
+        "Title": "Dead by Daylight",
+        "Developer": "Behaviour Digital Inc.",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 1
+      }
+    ]
+  },
+  {
+    "Id": 6,
+    "Genre": "Nudity",
+    "Games": [
+      {
+        "Id": 13,
+        "Title": "Rust",
+        "Developer": "Facepunch Studios",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 1
+      },
+      {
+        "Id": 29,
+        "Title": "Conan Exiles",
+        "Developer": "Funcom",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 1
+      },
+      {
+        "Id": 54,
+        "Title": "Path of Exile",
+        "Developer": "Grinding Gear Games",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 2
+      },
+      {
+        "Id": 74,
+        "Title": "The Witcher 3: Wild Hunt",
+        "Developer": "CD PROJEKT RED",
+        "Tags": "VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag, VaporStore.Data.Models.Tag",
+        "Players": 1
+      }
+    ]
+  }
+]
