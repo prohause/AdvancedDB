@@ -1,4 +1,7 @@
-﻿namespace VaporStore
+﻿using System.Xml;
+using System.Xml.Serialization;
+
+namespace VaporStore
 {
     using AutoMapper;
     using Data;
@@ -9,6 +12,8 @@
 
     public class StartUp
     {
+        public static XmlSerializerNamespaces Namespaces = new XmlSerializerNamespaces(new[] { new XmlQualifiedName("", "") });
+
         public static void Main(string[] args)
         {
             var context = new VaporStoreDbContext();
@@ -37,11 +42,11 @@
 
         private static void ExportEntities(VaporStoreDbContext context, string exportDir)
         {
-            var jsonOutput = Serializer.ExportGamesByGenres(context, new[] { "Nudity", "Violent" });
-            PrintAndExportEntityToFile(jsonOutput, exportDir + "GamesByGenres.json");
+            //var jsonOutput = Serializer.ExportGamesByGenres(context, new[] { "Nudity", "Violent" });
+            //PrintAndExportEntityToFile(jsonOutput, exportDir + "GamesByGenres.json");
 
-            //var xmlOutput = Serializer.ExportUserPurchasesByType(context, "Digital");
-            //PrintAndExportEntityToFile(xmlOutput, exportDir + "UserPurchases.xml");
+            var xmlOutput = Serializer.ExportUserPurchasesByType(context, "Digital");
+            PrintAndExportEntityToFile(xmlOutput, exportDir + "UserPurchases.xml");
         }
 
         private static void ImportEntities(VaporStoreDbContext context, string baseDir, string exportDir)

@@ -148,25 +148,16 @@ namespace VaporStore.DataProcessor
 
             foreach (var importPurchaseDto in importedPurchases)
             {
-                if (!IsValid(importPurchaseDto))
-                {
-                    result.AppendLine("Invalid Data");
-                    continue;
-                }
-
-                var dateIsValid = DateTime.TryParse(importPurchaseDto.Date, out var currentDate);
                 var card = cards.FirstOrDefault(c => c.Number == importPurchaseDto.Card);
                 var game = games.FirstOrDefault(g => g.Name == importPurchaseDto.Title);
 
-                var enumIsValid = Enum.TryParse<PurchaseType>(importPurchaseDto.Type,
-                    out var purchaseType);
-
-                if (!dateIsValid || !enumIsValid || card == null || game == null)
+                if (!IsValid(importPurchaseDto) || card == null || game == null )
                 {
                     result.AppendLine("Invalid Data");
                     continue;
                 }
 
+                var enumType = Enum.Parse<PurchaseType>(importPurchaseDto.Type);
                 var purchase = new Purchase
                 {
                     Card = card,
@@ -174,7 +165,7 @@ namespace VaporStore.DataProcessor
                         .ParseExact(importPurchaseDto.Date, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
                     Game = game,
                     ProductKey = importPurchaseDto.ProductKey,
-                    Type = purchaseType
+                    Type = enumType
                 };
 
                 purchases.Add(purchase);
